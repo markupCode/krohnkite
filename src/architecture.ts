@@ -1,4 +1,7 @@
-enum Shortcut {
+import { Window } from "./engine/window";
+import { Rect } from "./util/rect";
+
+export enum Shortcut {
   Left,
   Right,
   Up,
@@ -23,7 +26,7 @@ enum Shortcut {
   SetLayout
 }
 
-enum WindowState {
+export enum WindowState {
   Tile,
   FreeTile,
   Float,
@@ -31,7 +34,7 @@ enum WindowState {
   Unmanaged
 }
 
-interface IConfig {
+export interface IConfig {
   enableMonocleLayout: boolean;
   enableQuarterLayout: boolean;
   enableSpreadLayout: boolean;
@@ -51,7 +54,7 @@ interface IConfig {
   tileLayoutGap: number;
 }
 
-interface IDriverWindow {
+export interface IDriverWindow {
   readonly context: IDriverContext;
   readonly fullScreen: boolean;
   readonly geometry: Rect;
@@ -63,12 +66,12 @@ interface IDriverWindow {
   visible(ctx: IDriverContext): boolean;
 }
 
-interface IDriverContext {
+export interface IDriverContext {
   readonly id: string;
   readonly ignore: boolean;
 }
 
-interface IDriver {
+export interface IDriver {
   forEachScreen(func: (ctx: IDriverContext) => void): void;
   getCurrentContext(): IDriverContext;
   getCurrentWindow(): Window | null;
@@ -77,7 +80,7 @@ interface IDriver {
   setTimeout(func: () => void, timeout: number): void;
 }
 
-interface IEngine {
+export interface IEngine {
   adjustLayout(basis: Window): void;
   arrangeScreen(ctx: IDriverContext): void;
 
@@ -100,7 +103,7 @@ interface IEngine {
   setLayout(layout: any): void;
 }
 
-interface ILayout {
+export interface ILayout {
   readonly enabled: boolean;
 
   adjust?(area: Rect, tiles: Window[], basis: Window): void;
@@ -110,4 +113,4 @@ interface ILayout {
   handleShortcut?(input: Shortcut, data?: any): boolean;
 }
 
-let CONFIG: IConfig;
+export let CONFIG: IConfig;

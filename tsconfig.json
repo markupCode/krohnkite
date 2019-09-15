@@ -1,11 +1,12 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "es5",
-    "outFile": "krohnkite.js",
     "removeComments": true,
-    "lib": ["es5"],
+    "lib": ["es6"],
     "alwaysStrict": true,
-    "strict": true
+    "strict": true,
+    "outDir": "./dist/",
+    "module": "es6",
+    "target": "es5"
   }
 }

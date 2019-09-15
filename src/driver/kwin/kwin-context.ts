@@ -1,4 +1,7 @@
-class KWinContext implements IDriverContext {
+import { IDriverContext } from "../../architecture";
+import { KWINCONFIG } from "./kwin-config";
+
+export class KWinContext implements IDriverContext {
   public readonly screen: number;
   public readonly activity: string;
   public readonly desktop: number;

@@ -3,14 +3,14 @@ const DEBUG = {
   started: new Date().getTime()
 };
 
-function debug(f: () => any) {
+export function debug(f: () => any) {
   if (DEBUG.enabled) {
     const timestamp = (new Date().getTime() - DEBUG.started) / 1000;
     console.log("[" + timestamp + "]", f()); // tslint:disable-line:no-console
   }
 }
 
-function debugObj(f: () => [string, any]) {
+export function debugObj(f: () => [string, any]) {
   if (DEBUG.enabled) {
     const timestamp = (new Date().getTime() - DEBUG.started) / 1000;
     const [name, obj] = f();

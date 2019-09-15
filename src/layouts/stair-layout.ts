@@ -1,4 +1,8 @@
-class StairLayout implements ILayout {
+import { CONFIG, ILayout, Shortcut } from "../architecture";
+import { Window } from "../engine/window";
+import { Rect } from "../util/rect";
+
+export class StairLayout implements ILayout {
   public get enabled(): boolean {
     return CONFIG.enableStairLayout;
   }
@@ -46,10 +50,4 @@ class StairLayout implements ILayout {
   public toString(): string {
     return "StairLayout(" + this.space + ")";
   }
-}
-
-try {
-  exports.StairLayout = StairLayout;
-} catch (e) {
-  /* ignore */
 }

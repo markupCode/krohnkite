@@ -1,4 +1,12 @@
-class KWinWindow implements IDriverWindow {
+import { IDriverContext, IDriverWindow } from "../../architecture";
+import { debugObj } from "../../util/debug";
+import { clip, matchWords } from "../../util/func";
+import { toQRect, toRect } from "../../util/kwinutil";
+import { Rect } from "../../util/rect";
+import { KWINCONFIG } from "./kwin-config";
+import { KWinContext } from "./kwin-context";
+
+export class KWinWindow implements IDriverWindow {
   public static generateID(client: KWin.Client) {
     return String(client) + "/" + client.windowId;
   }
@@ -118,8 +126,6 @@ class KWinWindow implements IDriverWindow {
     );
   }
 
-  //#region Private Methods
-
   private adjustGeometry(geometry: Rect): Rect {
     let width = geometry.width;
     let height = geometry.height;
@@ -173,7 +179,6 @@ class KWinWindow implements IDriverWindow {
     debugObj(() => [
       "applyResizeIncrement",
       {
-        // tslint:disable-next-line:object-literal-sort-keys
         unit,
         base,
         geom,
@@ -184,6 +189,4 @@ class KWinWindow implements IDriverWindow {
 
     return [newWidth, newHeight];
   }
-
-  //#endregion
 }

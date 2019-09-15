@@ -1,4 +1,8 @@
-class SpreadLayout implements ILayout {
+import { CONFIG, ILayout, Shortcut } from "../architecture";
+import { Window } from "../engine/window";
+import { Rect } from "../util/rect";
+
+export class SpreadLayout implements ILayout {
   public get enabled(): boolean {
     return CONFIG.enableSpreadLayout;
   }
@@ -50,10 +54,4 @@ class SpreadLayout implements ILayout {
   public toString(): string {
     return "SpreadLayout(" + this.space + ")";
   }
-}
-
-try {
-  exports.SpreadLayout = SpreadLayout;
-} catch (e) {
-  /* ignore */
 }

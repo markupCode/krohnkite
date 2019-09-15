@@ -1,4 +1,6 @@
-class KWinConfig implements IConfig {
+import { IConfig } from "../../architecture";
+
+export class KWinConfig implements IConfig {
   //#region Layout
   public enableMonocleLayout: boolean;
   public enableQuarterLayout: boolean;
@@ -51,7 +53,7 @@ class KWinConfig implements IConfig {
       return str.split(",").map(part => part.trim());
     }
 
-    DEBUG.enabled = DEBUG.enabled || KWin.readConfig("debug", false);
+    // DEBUG.enabled = DEBUG.enabled || KWin.readConfig("debug", false);
 
     this.enableMonocleLayout = KWin.readConfig("enableMonocleLayout", true);
     this.enableQuarterLayout = KWin.readConfig("enableQuarterLayout", false);
@@ -96,4 +98,4 @@ class KWinConfig implements IConfig {
 }
 
 /* HACK: save casting */
-let KWINCONFIG: KWinConfig;
+export let KWINCONFIG: KWinConfig;

@@ -1,4 +1,7 @@
-function stackTiles(tiles: Window[], area: Rect, gap = 0) {
+import { Window } from "../engine/window";
+import { Rect } from "../util/rect";
+
+export function stackTiles(tiles: Window[], area: Rect, gap = 0) {
   if (tiles.length === 1) {
     tiles[0].geometry = area;
     return;
@@ -16,7 +19,7 @@ function stackTiles(tiles: Window[], area: Rect, gap = 0) {
   });
 }
 
-class LayoutWeightMap {
+export class LayoutWeightMap {
   private map: { [key: string]: [Window, number] };
   constructor() {
     this.map = {};
@@ -48,7 +51,7 @@ class LayoutWeightMap {
   }
 }
 
-function stackTilesWithWeight(
+export function stackTilesWithWeight(
   tiles: Window[],
   area: Rect,
   weights: LayoutWeightMap,
@@ -75,7 +78,7 @@ function stackTilesWithWeight(
   });
 }
 
-function adjustStackWeights(
+export function adjustStackWeights(
   stack: Window[],
   basis: Window,
   basisHeight: number,

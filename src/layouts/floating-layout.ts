@@ -1,4 +1,8 @@
-class FloatingLayout implements ILayout {
+import { ILayout, WindowState } from "../architecture";
+import { Window } from "../engine/window";
+import { Rect } from "../util/rect";
+
+export class FloatingLayout implements ILayout {
   public static instance = new FloatingLayout();
 
   public get enabled(): boolean {
@@ -12,10 +16,4 @@ class FloatingLayout implements ILayout {
   public toString(): string {
     return "FloatingLayout()";
   }
-}
-
-try {
-  exports.FloatingLayout = FloatingLayout;
-} catch (e) {
-  /* ignore */
 }

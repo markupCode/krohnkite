@@ -1,4 +1,8 @@
-class MonocleLayout implements ILayout {
+import { CONFIG, ILayout } from "../architecture";
+import { Window } from "../engine/window";
+import { Rect } from "../util/rect";
+
+export class MonocleLayout implements ILayout {
   public get enabled(): boolean {
     return CONFIG.enableMonocleLayout;
   }
@@ -14,10 +18,4 @@ class MonocleLayout implements ILayout {
   public toString(): string {
     return "MonocleLayout()";
   }
-}
-
-try {
-  exports.MonocleLayout = MonocleLayout;
-} catch (e) {
-  /* ignore */
 }

@@ -1,4 +1,10 @@
-class QuarterLayout implements ILayout {
+import { CONFIG, ILayout, WindowState } from "../architecture";
+import { Window } from "../engine/window";
+import { WindowResizeDelta } from "../engine/window-resize-delta";
+import { clip } from "../util/func";
+import { Rect } from "../util/rect";
+
+export class QuarterLayout implements ILayout {
   public static readonly MAX_PROPORTION = 0.8;
 
   public get enabled(): boolean {
@@ -169,10 +175,4 @@ class QuarterLayout implements ILayout {
   public toString(): string {
     return "QuarterLayout()";
   }
-}
-
-try {
-  exports.QuarterLayout = QuarterLayout;
-} catch (e) {
-  /* ignore */
 }

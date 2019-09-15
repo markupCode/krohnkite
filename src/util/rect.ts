@@ -1,4 +1,4 @@
-class Rect {
+export class Rect {
   public readonly height: number;
   public readonly width: number;
   public readonly x: number;
@@ -58,10 +58,4 @@ class Rect {
   public toString(): string {
     return "Rect(" + [this.x, this.y, this.width, this.height].join(", ") + ")";
   }
-}
-
-try {
-  exports.Rect = Rect;
-} catch (e) {
-  /* ignore */
 }

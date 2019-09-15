@@ -1,7 +1,18 @@
+import {
+  CONFIG,
+  IDriver,
+  IDriverContext,
+  Shortcut,
+  WindowState
+} from "../architecture";
+import { debugObj } from "../util/debug";
+import { TilingEngine } from "./tiling-engine";
+import { Window } from "./window";
+
 /**
  * A thin layer which translates WM events to tiling actions.
  */
-class TilingController {
+export class TilingController {
   private driver: IDriver;
   private engine: TilingEngine;
 
@@ -51,6 +62,7 @@ class TilingController {
       // TODO: refactor this block;
       const diff = window.actualGeometry.subtract(window.geometry);
       const distance = Math.sqrt(diff.x ** 2 + diff.y ** 2);
+
       // TODO: arbitrary constant
       if (distance > 30) {
         window.floatGeometry = window.actualGeometry;
@@ -78,6 +90,7 @@ class TilingController {
 
   public onWindowResizeOver(window: Window): void {
     debugObj(() => ["onWindowResizeOver", { window }]);
+
     if (CONFIG.adjustLayout && window.state === WindowState.Tile) {
       this.engine.adjustLayout(window);
       this.engine.arrange();
@@ -150,10 +163,4 @@ class TilingController {
 
     this.engine.arrange();
   }
-}
-
-try {
-  exports.TilingController = TilingController;
-} catch (e) {
-  /* ignore */
 }

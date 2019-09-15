@@ -1,4 +1,15 @@
-class TileLayout implements ILayout {
+import { CONFIG, ILayout, Shortcut } from "../architecture";
+import { Window } from "../engine/window";
+import { WindowResizeDelta } from "../engine/window-resize-delta";
+import { clip, slide } from "../util/func";
+import { Rect } from "../util/rect";
+import {
+  adjustStackWeights,
+  LayoutWeightMap,
+  stackTilesWithWeight
+} from "./layout-utils";
+
+export class TileLayout implements ILayout {
   public static readonly MIN_MASTER_RATIO = 0.2;
   public static readonly MAX_MASTER_RATIO = 0.8;
 
@@ -176,10 +187,4 @@ class TileLayout implements ILayout {
       ")"
     );
   }
-}
-
-try {
-  exports.TileLayout = TileLayout;
-} catch (e) {
-  /* ignore */
 }

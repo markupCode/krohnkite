@@ -1,4 +1,4 @@
-function clip(value: number, min: number, max: number): number {
+export function clip(value: number, min: number, max: number): number {
   if (value < min) {
     return min;
   }
@@ -10,7 +10,7 @@ function clip(value: number, min: number, max: number): number {
   return value;
 }
 
-function slide(value: number, step: number): number {
+export function slide(value: number, step: number): number {
   if (step === 0) {
     return value;
   }
@@ -18,7 +18,7 @@ function slide(value: number, step: number): number {
   return Math.floor(value / step + 1.000001) * step;
 }
 
-function matchWords(str: string, words: string[]): number {
+export function matchWords(str: string, words: string[]): number {
   for (let i = 0; i < words.length; i++) {
     if (str.indexOf(words[i]) >= 0) {
       return i;
@@ -28,7 +28,7 @@ function matchWords(str: string, words: string[]): number {
   return -1;
 }
 
-function wrapIndex(index: number, length: number): number {
+export function wrapIndex(index: number, length: number): number {
   if (index < 0) {
     return index + length;
   }
