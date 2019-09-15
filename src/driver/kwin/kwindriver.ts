@@ -1,22 +1,4 @@
-// Copyright (c) 2018-2019 Eon S. Jeon <esjeon@hyunmu.am>
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the "Software"),
-// to deal in the Software without restriction, including without limitation
-// the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the
-// Software is furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-// DEALINGS IN THE SOFTWARE.
+
 
 /**
  * Abstracts KDE implementation specific details.
@@ -53,10 +35,12 @@ class KWinDriver implements IDriver {
         for (let i = 0; i < clients.length; i++) {
             const window = this.registerWindow(clients[i]);
             this.engine.manage(window);
-            if (window.state !== WindowState.Unmanaged)
+            if (window.state !== WindowState.Unmanaged) {
                 this.bindWindowEvents(window, clients[i]);
-            else
+            }
+            else {
                 this.unregisterWindow(window);
+            }
         }
         this.engine.arrange();
     }
@@ -66,8 +50,9 @@ class KWinDriver implements IDriver {
      */
 
     public forEachScreen(func: (ctx: IDriverContext) => void) {
-        for (let screen = 0; screen < workspace.numScreens; screen ++)
+        for (let screen = 0; screen < workspace.numScreens; screen ++) {
             func(new KWinContext(screen, workspace.currentActivity, workspace.currentDesktop));
+        }
     }
 
     public getCurrentContext(): IDriverContext {
@@ -80,8 +65,9 @@ class KWinDriver implements IDriver {
 
     public getCurrentWindow(): Window | null {
         const client = workspace.activeClient;
-        if (!client)
+        if (!client) {
             return null;
+        }
         return this.queryWindow(client);
     }
 
@@ -107,8 +93,9 @@ class KWinDriver implements IDriver {
 
     private bindShortcut() {
         /* check if method exists */
-        if (!KWin.registerShortcut)
+        if (!KWin.registerShortcut) {
             return;
+        }
 
         const bind = (seq: string, title: string, input: Shortcut) => {
             title = "Krohnkite: " + title;
@@ -163,10 +150,12 @@ class KWinDriver implements IDriver {
             let enabled = false;
             try { enabled = !!workspace; } catch (e) { /* ignore */ }
 
-            if (enabled)
+            if (enabled) {
                 handler.apply(this, args);
-            else
+            }
+            else {
                 signal.disconnect(wrapper);
+            }
         };
         signal.connect(wrapper);
     }
@@ -207,10 +196,12 @@ class KWinDriver implements IDriver {
             const handler = () => {
                 const window = this.registerWindow(client);
                 this.control.onWindowAdded(window);
-                if (window.state !== WindowState.Unmanaged)
+                if (window.state !== WindowState.Unmanaged) {
                     this.bindWindowEvents(window, client);
-                else
+                }
+                else {
                     this.unregisterWindow(window);
+                }
 
                 client.windowShown.disconnect(handler);
             };
@@ -232,8 +223,9 @@ class KWinDriver implements IDriver {
             if (KWINCONFIG.preventMinimize) {
                 client.minimized = false;
                 workspace.activeClient = client;
-            } else
+            } else {
                 this.control.onWindowChanged(this.queryWindow(client), "minimized");
+            }
         });
 
         this.connect(workspace.clientUnminimized, (client: KWin.Client) =>
@@ -252,28 +244,35 @@ class KWinDriver implements IDriver {
             debugObj(() => ["moveResizedChanged", {window, move: client.move, resize: client.resize}]);
             if (moving !== client.move) {
                 moving = client.move;
-                if (moving)
+                if (moving) {
                     this.control.onWindowMoveStart(window);
-                else
+                }
+                else {
                     this.control.onWindowMoveOver(window);
+                }
             }
             if (resizing !== client.resize) {
                 resizing = client.resize;
-                if (resizing)
+                if (resizing) {
                     this.control.onWindowResizeStart(window);
-                else
+                }
+                else {
                     this.control.onWindowResizeOver(window);
+                }
             }
         });
 
         this.connect(client.geometryChanged, () => {
-            if (moving)
+            if (moving) {
                 this.control.onWindowMove(window);
-            else if (resizing)
+            }
+            else if (resizing) {
                 this.control.onWindowResize(window);
+ }
             else {
-                if (!window.actualGeometry.equals(window.geometry))
+                if (!window.actualGeometry.equals(window.geometry)) {
                     this.control.onWindowGeometryChanged(window);
+                }
             }
         });
 
