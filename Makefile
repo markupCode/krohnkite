@@ -76,7 +76,7 @@ $(KWIN_CONFIG_UI): res/config.ui
 $(NODE_SCRIPT): $(SRC)
 	tsc
 
-$(NODE_META): res/package.json
+$(NODE_META): package.json
 	sed "s/\$$VER/$(PROJECT_VER).0/" $< > $@
 
 .PHONY: all clean install package test run stop

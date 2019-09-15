@@ -1,5 +1,4 @@
-Kröhnkite
-=========
+# Kröhnkite
 
 [![AUR-git](https://img.shields.io/aur/version/kwin-scripts-krohnkite-git.svg?label=AUR-git)](https://aur.archlinux.org/packages/kwin-scripts-krohnkite-git/)
 
@@ -16,43 +15,39 @@ K and looks cool.
 
 ![screenshot](img/screenshot.png)
 
+## Features
 
-Features
---------
- * DWM-like window tiling
-    - Dynamically tile windows, rather than manually placing each.
-    - Floating windows
- * Fully integrates into KWin features, including:
-    - **Multi-screen**
-    - **Activities & Virtual desktop**
-    - Basic window management (minimize, fullscreen, switching, etc)
- * Multiple Layout Support
-    - Tiling layout
-    - Monocle layout
-    - Desktop-friendly layouts (Spread, Stair)
+- DWM-like window tiling
+  - Dynamically tile windows, rather than manually placing each.
+  - Floating windows
+- Fully integrates into KWin features, including:
+  - **Multi-screen**
+  - **Activities & Virtual desktop**
+  - Basic window management (minimize, fullscreen, switching, etc)
+- Multiple Layout Support
+  - Tiling layout
+  - Monocle layout
+  - Desktop-friendly layouts (Spread, Stair)
 
-Development Requirement
------------------------
+## Development Requirement
 
- * Typescript (tested w/ 3.1.x)
- * GNU Make
- * p7zip (7z)
+- Typescript (tested w/ 3.1.x)
+- GNU Make
+- p7zip (7z)
 
-
-Installation
-------------
+## Installation
 
 You can install Kröhnkite in multiple ways.
 
-### Using .kwinscript package file ###
+### Using .kwinscript package file
 
 You can download `krohnkite-x.x.kwinscript` file, and install it through
-*System Settings*.
+_System Settings_.
 
- 1. Download the kwinscript file
- 2. Open `System Settings` > `Window Management` > `KWin Scripts`
- 3. Press `Import KWin script...` on the top-right corner
- 4. Select the downloaded file
+1. Download the kwinscript file
+2. Open `System Settings` > `Window Management` > `KWin Scripts`
+3. Press `Import KWin script...` on the top-right corner
+4. Select the downloaded file
 
 Alternatively, through command-line:
 
@@ -63,7 +58,7 @@ To uninstall the package:
 
     plasmapkg2 -t kwinscript -r krohnkite
 
-### Installing from Git repository ###
+### Installing from Git repository
 
 The simplest method would be:
 
@@ -78,7 +73,7 @@ You can also manually build package file using:
 
 The generated package file can be imported from "KWin Script" dialog.
 
-### Simply Trying Out ###
+### Simply Trying Out
 
 Krohnkite can be temporarily loaded without installing the script:
 
@@ -88,7 +83,7 @@ Krohnkite can be temporarily loaded without installing the script:
 Note that Krohnkite can destroy itself completely once it is disabled, so no
 restart is required to deactivated it.
 
-### Enabling User-Configuration ###
+### Enabling User-Configuration
 
 [It is reported][kwinconf] that a manual step is required to enable user
 configuration of KWin scripts. This is a limitation of KWin scripting.
@@ -103,51 +98,48 @@ A configuration button will appear in `KWin Scripts` in `System Settings`.
 ![config button shown](img/conf.png)
 
 To make changes effective, **the script must be reactivate**:
-  1) On `KWin Scripts` dialog, untick Krohnkite
-  2) `Apply`
-  3) tick Krohnkite
-  4) `Apply`
+
+1. On `KWin Scripts` dialog, untick Krohnkite
+2. `Apply`
+3. tick Krohnkite
+4. `Apply`
 
 [kwinconf]: https://github.com/faho/kwin-tiling/issues/79#issuecomment-311465357
 
+## Default Key Bindings
 
-Default Key Bindings
---------------------
+| Key              | Action             |
+| ---------------- | ------------------ |
+| Meta + J         | Focus Down/Next    |
+| Meta + K         | Focus Up/Previous  |
+| Meta + H         | Left               |
+| Meta + L         | Right              |
+|                  |                    |
+| Meta + Shift + J | Move Down/Next     |
+| Meta + Shift + K | Move Up/Previous   |
+| Meta + Shift + H | Move Left          |
+| Meta + Shift + L | Move Right         |
+|                  |                    |
+| Meta + I         | Increase           |
+| Meta + D         | Decrease           |
+| Meta + F         | Toggle Floating    |
+| Meta + \         | Cycle Layout       |
+|                  |                    |
+| Meta + Return    | Set as Master      |
+|                  |                    |
+| Meta + T         | Use Tile Layout    |
+| Meta + M         | Use Monocle Layout |
+| _unbound_        | Use Spread Layout  |
+| _unbound_        | Use Stair Layout   |
 
-| Key               | Action                         |
-| ----------------- | ------------------------------ |
-| Meta + J          | Focus Down/Next                |
-| Meta + K          | Focus Up/Previous              |
-| Meta + H          | Left                           |
-| Meta + L          | Right                          |
-|                   |                                |
-| Meta + Shift + J  | Move Down/Next                 |
-| Meta + Shift + K  | Move Up/Previous               |
-| Meta + Shift + H  | Move Left                      |
-| Meta + Shift + L  | Move Right                     |
-|                   |                                |
-| Meta + I          | Increase                       |
-| Meta + D          | Decrease                       |
-| Meta + F          | Toggle Floating                |
-| Meta + \          | Cycle Layout                   |
-|                   |                                |
-| Meta + Return     | Set as Master                  |
-|                   |                                |
-| Meta + T          | Use Tile Layout                |
-| Meta + M          | Use Monocle Layout             |
-| *unbound*         | Use Spread Layout              |
-| *unbound*         | Use Stair Layout               |
+## Tips
 
-
-Tips
-----
-
-### Setting Up for Multi-Screen ###
+### Setting Up for Multi-Screen
 
 Krohnkite supports multi-screen setup, but KWin has to be configured to unlock
 the full potential of the script.
 
-1. Enable `Separate Screen Focus` under `Window Management` > 
+1. Enable `Separate Screen Focus` under `Window Management` >
    `Window Behavior` > `Multiscreen Behaviour`
 2. Bind keys for global shortcut `Switch to Next/Previous Screen`
    (Recommend: `Meta + ,` / `Meta + .`)
@@ -156,7 +148,7 @@ the full potential of the script.
 
 Note: `Separate Screen Focus` appears only when multiple monitors are present.
 
-### Removing Title Bars ###
+### Removing Title Bars
 
 Breeze window decoration can be configured to completely remove title bars from
 all windows:
@@ -168,7 +160,7 @@ all windows:
    - `Regular expression to match`: `.*`
    - Tick `Hide window title bar`
 
-### Changing Border Colors ###
+### Changing Border Colors
 
 Changing the border color makes it easier to identify current window. This is
 convinient if title bars are removed.
@@ -176,24 +168,22 @@ convinient if title bars are removed.
 1. Open `~/.config/kdeglobals` with your favorite editor
 2. Scroll down and find `[WM]` section
 3. Append the followings to the section:
-    - `frame=61,174,233`: set the border color of active window to *RGB(61,174,233)*
-    - `inactiveFrame=239,240,241`: set the border color of inactive window to *RGB(239,240,241)*
+   - `frame=61,174,233`: set the border color of active window to _RGB(61,174,233)_
+   - `inactiveFrame=239,240,241`: set the border color of inactive window to _RGB(239,240,241)_
 4. You must **restart** your session to see changes. (i.e. re-login, reboot)
 
 (Note: the RGB values presented here are for the default Breeze theme)
 
+## Useful Development Resources
 
-Useful Development Resources
-----------------------------
-
- * [KWin Scripting Tutorial](https://techbase.kde.org/Development/Tutorials/KWin/Scripting)
- * [KWin Scripting API 4.9 Reference](https://techbase.kde.org/Development/Tutorials/KWin/Scripting/API_4.9)
- * KDE API Reference
-    - [KWin::Workspace Class](https://api.kde.org/4.x-api/kde-workspace-apidocs/kwin/html/classKWin_1_1Workspace.html)
-    - [KWin::Toplevel Class](https://api.kde.org/4.x-api/kde-workspace-apidocs/kwin/html/classKWin_1_1Toplevel.html)
-    - [KWin::Client Class](https://api.kde.org/4.x-api/kde-workspace-apidocs/kwin/html/classKWin_1_1Client.html)
- * Adding configuration dialog
-    - [Development/Tutorials/Plasma/JavaScript/ConfigDialog](https://techbase.kde.org/Development/Tutorials/Plasma/JavaScript/ConfigDialog)
-    - [Development/Tutorials/Using KConfig XT](https://techbase.kde.org/Development/Tutorials/Using_KConfig_XT)
- * `*.ui` files can be edited with [Qt Designer](http://doc.qt.io/qt-5/qtdesigner-manual.html).
-   It's very straight-forward if you're used to UI programming.
+- [KWin Scripting Tutorial](https://techbase.kde.org/Development/Tutorials/KWin/Scripting)
+- [KWin Scripting API 4.9 Reference](https://techbase.kde.org/Development/Tutorials/KWin/Scripting/API_4.9)
+- KDE API Reference
+  - [KWin::Workspace Class](https://api.kde.org/4.x-api/kde-workspace-apidocs/kwin/html/classKWin_1_1Workspace.html)
+  - [KWin::Toplevel Class](https://api.kde.org/4.x-api/kde-workspace-apidocs/kwin/html/classKWin_1_1Toplevel.html)
+  - [KWin::Client Class](https://api.kde.org/4.x-api/kde-workspace-apidocs/kwin/html/classKWin_1_1Client.html)
+- Adding configuration dialog
+  - [Development/Tutorials/Plasma/JavaScript/ConfigDialog](https://techbase.kde.org/Development/Tutorials/Plasma/JavaScript/ConfigDialog)
+  - [Development/Tutorials/Using KConfig XT](https://techbase.kde.org/Development/Tutorials/Using_KConfig_XT)
+- `*.ui` files can be edited with [Qt Designer](http://doc.qt.io/qt-5/qtdesigner-manual.html).
+  It's very straight-forward if you're used to UI programming.
