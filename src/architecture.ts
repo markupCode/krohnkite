@@ -34,26 +34,6 @@ export enum WindowState {
   Unmanaged
 }
 
-export interface IConfig {
-  enableMonocleLayout: boolean;
-  enableQuarterLayout: boolean;
-  enableSpreadLayout: boolean;
-  enableStairLayout: boolean;
-  enableTileLayout: boolean;
-  monocleMaximize: boolean;
-  maximizeSoleTile: boolean;
-
-  adjustLayout: boolean;
-  adjustLayoutLive: boolean;
-  noTileBorder: boolean;
-
-  screenGapBottom: number;
-  screenGapLeft: number;
-  screenGapRight: number;
-  screenGapTop: number;
-  tileLayoutGap: number;
-}
-
 export interface IDriverWindow {
   readonly context: IDriverContext;
   readonly fullScreen: boolean;
@@ -112,5 +92,3 @@ export interface ILayout {
 
   handleShortcut?(input: Shortcut, data?: any): boolean;
 }
-
-export let CONFIG: IConfig;

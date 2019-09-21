@@ -51,12 +51,12 @@ export class WindowStore {
     );
   }
 
-  public visibleTileables(ctx: IDriverContext): Window[] {
+  public visibleTileables(context: IDriverContext): Window[] {
     return this.list.filter(
       win =>
         (win.state === WindowState.Tile ||
           win.state === WindowState.FreeTile) &&
-        win.visible(ctx)
+        win.visible(context)
     );
   }
 }

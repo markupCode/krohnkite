@@ -1,13 +1,13 @@
 import {
-  CONFIG,
   IDriver,
   IDriverContext,
   IEngine,
   Shortcut,
   WindowState
 } from "../architecture";
+import { IConfig } from "../domain/config/config";
+import { ILogger } from "../domain/logging/logger";
 import { KWinContext } from "../driver/kwin/kwin-context";
-import { debug, debugObj } from "../util/debug";
 import { wrapIndex } from "../util/func";
 import { Rect } from "../util/rect";
 import { LayoutStore } from "./layout-store";
@@ -15,59 +15,65 @@ import { Window } from "./window";
 import { WindowStore } from "./window-store";
 
 /**
- * Maintains tiling context and performs various tiling actions.
+ * Maintains tiling context and performs various tiling actions
  */
 export class TilingEngine implements IEngine {
-  private driver: IDriver;
-  private layouts: LayoutStore;
-  private windows: WindowStore;
-
-  constructor(driver: IDriver) {
-    this.driver = driver;
-    this.layouts = new LayoutStore();
-    this.windows = new WindowStore();
-  }
+  constructor(
+    private driver: IDriver,
+    private layouts: LayoutStore,
+    private windows: WindowStore,
+    private config: IConfig,
+    private logger: ILogger
+  ) {}
 
   public adjustLayout(basis: Window) {
-    const ctx = basis.context as KWinContext;
-    const layout = this.layouts.getCurrentLayout(ctx);
+    // TODO: why there is assignment to the implementation?
+    const context = basis.context as KWinContext;
+    const layout = this.layouts.getCurrentLayout(context);
+
     if (layout.adjust) {
-      const fullArea = this.driver.getWorkingArea(ctx);
+      const fullArea = this.driver.getWorkingArea(context);
+
       const area = new Rect(
-        fullArea.x + CONFIG.screenGapLeft,
-        fullArea.y + CONFIG.screenGapTop,
-        fullArea.width - (CONFIG.screenGapLeft + CONFIG.screenGapRight),
-        fullArea.height - (CONFIG.screenGapTop + CONFIG.screenGapBottom)
+        fullArea.x + this.config.screenGapLeft,
+        fullArea.y + this.config.screenGapTop,
+        fullArea.width -
+          (this.config.screenGapLeft + this.config.screenGapRight),
+        fullArea.height -
+          (this.config.screenGapTop + this.config.screenGapBottom)
       );
-      const tiles = this.windows.visibleTiles(ctx);
+
+      const tiles = this.windows.visibleTiles(context);
       layout.adjust(area, tiles, basis);
     }
   }
 
   public arrange() {
-    debug(() => "arrange");
-    this.driver.forEachScreen((ctx: IDriverContext) => {
-      this.arrangeScreen(ctx);
+    this.logger.debug(() => "arrange");
+
+    this.driver.forEachScreen((context: IDriverContext) => {
+      this.arrangeScreen(context);
     });
   }
 
-  public arrangeScreen(ctx: IDriverContext) {
-    const layout = this.layouts.getCurrentLayout(ctx);
+  public arrangeScreen(context: IDriverContext) {
+    const layout = this.layouts.getCurrentLayout(context);
 
-    const fullArea = this.driver.getWorkingArea(ctx);
+    const fullArea = this.driver.getWorkingArea(context);
     const workingArea = new Rect(
-      fullArea.x + CONFIG.screenGapLeft,
-      fullArea.y + CONFIG.screenGapTop,
-      fullArea.width - (CONFIG.screenGapLeft + CONFIG.screenGapRight),
-      fullArea.height - (CONFIG.screenGapTop + CONFIG.screenGapBottom)
+      fullArea.x + this.config.screenGapLeft,
+      fullArea.y + this.config.screenGapTop,
+      fullArea.width - (this.config.screenGapLeft + this.config.screenGapRight),
+      fullArea.height - (this.config.screenGapTop + this.config.screenGapBottom)
     );
 
-    const visibles = this.windows.visibles(ctx);
-    const tiles = this.windows.visibleTiles(ctx);
-    debugObj(() => [
+    const visibles = this.windows.visibles(context);
+    const tiles = this.windows.visibleTiles(context);
+
+    this.logger.debug(() => [
       "arrangeScreen",
       {
-        ctx,
+        context,
         layout,
         tiles: tiles.length,
         visibles: visibles.length
@@ -81,11 +87,11 @@ export class TilingEngine implements IEngine {
       }
 
       if (window.state === WindowState.Tile) {
-        window.noBorder = CONFIG.noTileBorder;
+        window.noBorder = this.config.noTileBorder;
       }
     });
 
-    if (CONFIG.maximizeSoleTile && tiles.length === 1) {
+    if (this.config.maximizeSoleTile && tiles.length === 1) {
       tiles[0].noBorder = true;
       tiles[0].geometry = fullArea;
     } else if (tiles.length > 0) {
@@ -124,9 +130,9 @@ export class TilingEngine implements IEngine {
       return;
     }
 
-    const ctx = window ? window.context : this.driver.getCurrentContext();
+    const context = window ? window.context : this.driver.getCurrentContext();
 
-    const visibles = this.windows.visibles(ctx);
+    const visibles = this.windows.visibles(context);
     if (visibles.length === 0) {
       /* nothing to focus */
       return;
@@ -142,7 +148,11 @@ export class TilingEngine implements IEngine {
     const num = visibles.length;
     const newIndex = (idx + (step % num) + num) % num;
 
-    debugObj(() => ["moveFocus", { from: window, to: visibles[newIndex] }]);
+    this.logger.debug(() => [
+      "moveFocus",
+      { from: window, to: visibles[newIndex] }
+    ]);
+
     this.driver.setCurrentWindow(visibles[newIndex]);
   }
 
@@ -151,8 +161,8 @@ export class TilingEngine implements IEngine {
       return;
     }
 
-    const ctx = window.context;
-    const visibles = this.windows.visibles(ctx);
+    const context = window.context;
+    const visibles = this.windows.visibles(context);
     if (visibles.length < 2) {
       return;
     }
@@ -162,7 +172,7 @@ export class TilingEngine implements IEngine {
     const dstWin = visibles[vdst];
 
     const dst = this.windows.indexOf(dstWin);
-    debugObj(() => ["moveTile", { step, vsrc, vdst, dst }]);
+    this.logger.debug(() => ["moveTile", { step, vsrc, vdst, dst }]);
     this.windows.move(window, dst);
   }
 

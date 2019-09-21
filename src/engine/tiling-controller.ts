@@ -1,11 +1,11 @@
 import {
-  CONFIG,
   IDriver,
   IDriverContext,
   Shortcut,
   WindowState
 } from "../architecture";
-import { debugObj } from "../util/debug";
+import { IConfig } from "../domain/config/config";
+import { ILogger } from "../domain/logging/logger";
 import { TilingEngine } from "./tiling-engine";
 import { Window } from "./window";
 
@@ -13,37 +13,36 @@ import { Window } from "./window";
  * A thin layer which translates WM events to tiling actions.
  */
 export class TilingController {
-  private driver: IDriver;
-  private engine: TilingEngine;
-
-  public constructor(driver: IDriver, engine: TilingEngine) {
-    this.driver = driver;
-    this.engine = engine;
-  }
+  public constructor(
+    private driver: IDriver,
+    private engine: TilingEngine,
+    private config: IConfig,
+    private logger: ILogger
+  ) {}
 
   public onScreenCountChanged(count: number): void {
-    debugObj(() => ["onScreenCountChanged", { count }]);
+    this.logger.debug(() => ["onScreenCountChanged", { count }]);
     this.engine.arrange();
   }
 
-  public onScreenResized(ctx: IDriverContext): void {
-    debugObj(() => ["onScreenResized", { ctx }]);
-    this.engine.arrangeScreen(ctx);
+  public onScreenResized(context: IDriverContext): void {
+    this.logger.debug(() => ["onScreenResized", { ctx: context }]);
+    this.engine.arrangeScreen(context);
   }
 
-  public onCurrentContextChanged(ctx: IDriverContext): void {
-    debugObj(() => ["onCurrentContextChanged", { ctx }]);
+  public onCurrentContextChanged(context: IDriverContext): void {
+    this.logger.debug(() => ["onCurrentContextChanged", { ctx: context }]);
     this.engine.arrange();
   }
 
   public onWindowAdded(window: Window): void {
-    debugObj(() => ["onWindowAdded", { window }]);
+    this.logger.debug(() => ["onWindowAdded", { window }]);
     this.engine.manage(window);
     this.engine.arrange();
   }
 
   public onWindowRemoved(window: Window): void {
-    debugObj(() => ["onWindowRemoved", { window }]);
+    this.logger.debug(() => ["onWindowRemoved", { window }]);
     this.engine.unmanage(window);
     this.engine.arrange();
   }
@@ -57,7 +56,8 @@ export class TilingController {
   }
 
   public onWindowMoveOver(window: Window): void {
-    debugObj(() => ["onWindowMoveOver", { window }]);
+    this.logger.debug(() => ["onWindowMoveOver", { window }]);
+
     if (window.state === WindowState.Tile) {
       // TODO: refactor this block;
       const diff = window.actualGeometry.subtract(window.geometry);
@@ -79,8 +79,9 @@ export class TilingController {
   }
 
   public onWindowResize(window: Window): void {
-    debugObj(() => ["onWindowResizeOver", { window }]);
-    if (CONFIG.adjustLayout && CONFIG.adjustLayoutLive) {
+    this.logger.debug(() => ["onWindowResizeOver", { window }]);
+
+    if (this.config.adjustLayout && this.config.adjustLayoutLive) {
       if (window.state === WindowState.Tile) {
         this.engine.adjustLayout(window);
         this.engine.arrange();
@@ -89,18 +90,18 @@ export class TilingController {
   }
 
   public onWindowResizeOver(window: Window): void {
-    debugObj(() => ["onWindowResizeOver", { window }]);
+    this.logger.debug(() => ["onWindowResizeOver", { window }]);
 
-    if (CONFIG.adjustLayout && window.state === WindowState.Tile) {
+    if (this.config.adjustLayout && window.state === WindowState.Tile) {
       this.engine.adjustLayout(window);
       this.engine.arrange();
-    } else if (!CONFIG.adjustLayout) {
+    } else if (!this.config.adjustLayout) {
       this.engine.enforceSize(window);
     }
   }
 
   public onWindowGeometryChanged(window: Window): void {
-    debugObj(() => ["onWindowGeometryChanged", { window }]);
+    this.logger.debug(() => ["onWindowGeometryChanged", { window }]);
     this.engine.enforceSize(window);
   }
 
@@ -108,7 +109,7 @@ export class TilingController {
   // by itself anyway.
   public onWindowChanged(window: Window | null, comment?: string): void {
     if (window) {
-      debugObj(() => ["onWindowChanged", { window, comment }]);
+      this.logger.debug(() => ["onWindowChanged", { window, comment }]);
       this.engine.arrange();
     }
   }

@@ -3,7 +3,7 @@ import { debugObj } from "../../util/debug";
 import { clip, matchWords } from "../../util/func";
 import { toQRect, toRect } from "../../util/kwinutil";
 import { Rect } from "../../util/rect";
-import { KWINCONFIG } from "./kwin-config";
+import { KWINCONFIG } from "../../infrastructure/config/kwin-config-factory";
 import { KWinContext } from "./kwin-context";
 
 export class KWinWindow implements IDriverWindow {

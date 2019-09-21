@@ -14,7 +14,7 @@ import { TileLayout } from "../../layouts/tile-layout";
 import { debug, debugObj } from "../../util/debug";
 import { toRect } from "../../util/kwinutil";
 import { Rect } from "../../util/rect";
-import { KWINCONFIG, KWinConfig } from "./kwin-config";
+import { KWINCONFIG, KWinConfig } from "../../infrastructure/config/kwin-config-factory";
 import { KWinContext } from "./kwin-context";
 import { KWinSetTimeout } from "./kwin-settimeout";
 import { KWinWindow } from "./kwin-window";
