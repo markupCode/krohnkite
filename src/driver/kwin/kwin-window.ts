@@ -1,8 +1,8 @@
 import { IDriverContext, IDriverWindow } from "../../architecture";
-import { debugObj } from "../../util/debug";
-import { clip, matchWords } from "../../util/func";
-import { toQRect, toRect } from "../../util/kwinutil";
-import { Rect } from "../../util/rect";
+import { debugObj } from "../../utils/debug";
+import { clip, matchWords } from "../../utils/utils-service";
+import { toQRectangle, toRectangle } from "../../utils/ractangle-mappers";
+import { Rectangle } from "../../utils/rectangle";
 import { KWINCONFIG } from "../../infrastructure/config/kwin-config-factory";
 import { KWinContext } from "./kwin-context";
 
@@ -34,8 +34,8 @@ export class KWinWindow implements IDriverWindow {
     return this.client.fullScreen;
   }
 
-  public get geometry(): Rect {
-    return toRect(this.client.geometry);
+  public get geometry(): Rectangle {
+    return toRectangle(this.client.geometry);
   }
 
   public get shouldIgnore(): boolean {
@@ -68,7 +68,7 @@ export class KWinWindow implements IDriverWindow {
     this._bakNoBorder = client.noBorder;
   }
 
-  public commit(geometry?: Rect, noBorder?: boolean, keepBelow?: boolean) {
+  public commit(geometry?: Rectangle, noBorder?: boolean, keepBelow?: boolean) {
     if (this.client.move || this.client.resize) {
       return;
     }
@@ -84,7 +84,7 @@ export class KWinWindow implements IDriverWindow {
     if (geometry !== undefined) {
       geometry = this.adjustGeometry(geometry);
       if (KWINCONFIG.preventProtrusion) {
-        const area = toRect(
+        const area = toRectangle(
           workspace.clientArea(
             KWin.PlacementArea,
             this.client.screen,
@@ -95,11 +95,11 @@ export class KWinWindow implements IDriverWindow {
           /* assume windows will extrude only through right and bottom edges */
           const x = geometry.x + Math.min(area.maxX - geometry.maxX, 0);
           const y = geometry.y + Math.min(area.maxY - geometry.maxY, 0);
-          geometry = new Rect(x, y, geometry.width, geometry.height);
+          geometry = new Rectangle(x, y, geometry.width, geometry.height);
           geometry = this.adjustGeometry(geometry);
         }
       }
-      this.client.geometry = toQRect(geometry);
+      this.client.geometry = toQRectangle(geometry);
     }
   }
 
@@ -126,7 +126,7 @@ export class KWinWindow implements IDriverWindow {
     );
   }
 
-  private adjustGeometry(geometry: Rect): Rect {
+  private adjustGeometry(geometry: Rectangle): Rectangle {
     let width = geometry.width;
     let height = geometry.height;
 
@@ -155,10 +155,10 @@ export class KWinWindow implements IDriverWindow {
       );
     }
 
-    return new Rect(geometry.x, geometry.y, width, height);
+    return new Rectangle(geometry.x, geometry.y, width, height);
   }
 
-  private applyResizeIncrement(geom: Rect): [number, number] {
+  private applyResizeIncrement(geom: Rectangle): [number, number] {
     const unit = this.client.basicUnit;
     const base = this.client.minSize;
 

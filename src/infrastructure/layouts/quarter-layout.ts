@@ -1,8 +1,8 @@
-import { CONFIG, ILayout, WindowState } from "../architecture";
-import { Window } from "../engine/window";
-import { WindowResizeDelta } from "../engine/window-resize-delta";
-import { clip } from "../util/func";
-import { Rect } from "../util/rect";
+import { CONFIG, ILayout, WindowState } from "../../architecture";
+import { Window } from "../../engine/window";
+import { WindowResizeDelta } from "../../engine/window-resize-delta";
+import { clip } from "../../utils/utils-service";
+import { Rectangle } from "../../utils/rectangle";
 
 export class QuarterLayout implements ILayout {
   public static readonly MAX_PROPORTION = 0.8;
@@ -21,7 +21,7 @@ export class QuarterLayout implements ILayout {
     this.vsplit = 0.5;
   }
 
-  public adjust(area: Rect, tiles: Window[], basis: Window) {
+  public adjust(area: Rectangle, tiles: Window[], basis: Window) {
     if (tiles.length <= 1 || tiles.length > 4) {
       return;
     }
@@ -84,7 +84,7 @@ export class QuarterLayout implements ILayout {
     );
   }
 
-  public apply(tiles: Window[], area: Rect): void {
+  public apply(tiles: Window[], area: Rectangle): void {
     if (tiles.length === 1) {
       tiles[0].geometry = area;
       return;
@@ -97,18 +97,18 @@ export class QuarterLayout implements ILayout {
     const rightWidth = area.width - leftWidth;
     const rightX = area.x + leftWidth;
     if (tiles.length === 2) {
-      tiles[0].geometry = new Rect(area.x, area.y, leftWidth, area.height).gap(
-        0,
-        gap1,
-        0,
-        0
-      );
-      tiles[1].geometry = new Rect(rightX, area.y, rightWidth, area.height).gap(
-        gap2,
-        0,
-        0,
-        0
-      );
+      tiles[0].geometry = new Rectangle(
+        area.x,
+        area.y,
+        leftWidth,
+        area.height
+      ).gap(0, gap1, 0, 0);
+      tiles[1].geometry = new Rectangle(
+        rightX,
+        area.y,
+        rightWidth,
+        area.height
+      ).gap(gap2, 0, 0, 0);
       return;
     }
 
@@ -116,19 +116,19 @@ export class QuarterLayout implements ILayout {
     const rightBottomHeight = area.height - rightTopHeight;
     const rightBottomY = area.y + rightTopHeight;
     if (tiles.length === 3) {
-      tiles[0].geometry = new Rect(area.x, area.y, leftWidth, area.height).gap(
-        0,
-        gap1,
-        0,
-        0
-      );
-      tiles[1].geometry = new Rect(
+      tiles[0].geometry = new Rectangle(
+        area.x,
+        area.y,
+        leftWidth,
+        area.height
+      ).gap(0, gap1, 0, 0);
+      tiles[1].geometry = new Rectangle(
         rightX,
         area.y,
         rightWidth,
         rightTopHeight
       ).gap(gap2, 0, 0, gap1);
-      tiles[2].geometry = new Rect(
+      tiles[2].geometry = new Rectangle(
         rightX,
         rightBottomY,
         rightWidth,
@@ -141,25 +141,25 @@ export class QuarterLayout implements ILayout {
     const leftBottomHeight = area.height - leftTopHeight;
     const leftBottomY = area.y + leftTopHeight;
     if (tiles.length >= 4) {
-      tiles[0].geometry = new Rect(
+      tiles[0].geometry = new Rectangle(
         area.x,
         area.y,
         leftWidth,
         leftTopHeight
       ).gap(0, gap1, 0, gap1);
-      tiles[1].geometry = new Rect(
+      tiles[1].geometry = new Rectangle(
         rightX,
         area.y,
         rightWidth,
         rightTopHeight
       ).gap(gap2, 0, 0, gap1);
-      tiles[2].geometry = new Rect(
+      tiles[2].geometry = new Rectangle(
         rightX,
         rightBottomY,
         rightWidth,
         rightBottomHeight
       ).gap(gap2, 0, gap2, 0);
-      tiles[3].geometry = new Rect(
+      tiles[3].geometry = new Rectangle(
         area.x,
         leftBottomY,
         leftWidth,

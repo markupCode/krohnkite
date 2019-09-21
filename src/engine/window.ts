@@ -1,11 +1,11 @@
 import { IDriverContext, IDriverWindow, WindowState } from "../architecture";
 import { ILogger } from "../domain/logging/logger";
-import { Rect } from "../util/rect";
+import { Rectangle } from "../utils/rectangle";
 
 export class Window {
   public readonly id: string;
 
-  public get actualGeometry(): Rect {
+  public get actualGeometry(): Rectangle {
     return this.window.geometry;
   }
   public get context(): IDriverContext {
@@ -24,8 +24,8 @@ export class Window {
     );
   }
 
-  public floatGeometry: Rect;
-  public geometry: Rect;
+  public floatGeometry: Rectangle;
+  public geometry: Rectangle;
   public noBorder: boolean;
 
   public get state(): WindowState {

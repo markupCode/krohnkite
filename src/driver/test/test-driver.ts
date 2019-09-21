@@ -1,20 +1,20 @@
 import { CONFIG, IDriver, IDriverContext } from "../../architecture";
 import { Window } from "../../engine/window";
-import { Rect } from "../../util/rect";
+import { Rectangle } from "../../utils/rectangle";
 import { TestContext } from "./test-context";
 
 export class TestDriver implements IDriver {
   public currentScreen: number;
   public currentWindow: number;
   public numScreen: number;
-  public screenSize: Rect;
+  public screenSize: Rectangle;
   public windows: Window[];
 
   constructor() {
     this.currentScreen = 0;
     this.currentWindow = 0;
     this.numScreen = 1;
-    this.screenSize = new Rect(0, 0, 10000, 10000);
+    this.screenSize = new Rectangle(0, 0, 10000, 10000);
     this.windows = [];
   }
 
@@ -36,7 +36,7 @@ export class TestDriver implements IDriver {
     return this.windows.length !== 0 ? this.windows[this.currentWindow] : null;
   }
 
-  public getWorkingArea(ctx: IDriverContext): Rect {
+  public getWorkingArea(ctx: IDriverContext): Rectangle {
     return this.screenSize;
   }
 

@@ -1,7 +1,7 @@
-import { Window } from "../engine/window";
-import { Rect } from "../util/rect";
+import { Window } from "../../engine/window";
+import { Rectangle } from "../../utils/rectangle";
 
-export function stackTiles(tiles: Window[], area: Rect, gap = 0) {
+export function stackTiles(tiles: Window[], area: Rectangle, gap = 0) {
   if (tiles.length === 1) {
     tiles[0].geometry = area;
     return;
@@ -9,8 +9,9 @@ export function stackTiles(tiles: Window[], area: Rect, gap = 0) {
 
   const count = tiles.length;
   const tileHeight = (area.height + gap) / count - gap;
+  
   tiles.forEach((window: Window, i: number) => {
-    window.geometry = new Rect(
+    window.geometry = new Rectangle(
       area.x,
       area.y + Math.floor(i * (tileHeight + gap)),
       area.width,
@@ -53,7 +54,7 @@ export class LayoutWeightMap {
 
 export function stackTilesWithWeight(
   tiles: Window[],
-  area: Rect,
+  area: Rectangle,
   weights: LayoutWeightMap,
   gap = 0
 ) {
@@ -68,7 +69,7 @@ export function stackTilesWithWeight(
     const winy = area.y + (hsum * wacc) / wsum + i * gap;
     const winh = (hsum * weight) / wsum;
 
-    tile.geometry = new Rect(
+    tile.geometry = new Rectangle(
       area.x,
       Math.floor(winy),
       area.width,

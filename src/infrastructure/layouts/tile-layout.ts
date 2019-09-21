@@ -1,8 +1,9 @@
-import { CONFIG, ILayout, Shortcut } from "../architecture";
-import { Window } from "../engine/window";
-import { WindowResizeDelta } from "../engine/window-resize-delta";
-import { clip, slide } from "../util/func";
-import { Rect } from "../util/rect";
+import { ILayout, Shortcut } from "../../architecture";
+import { IConfig } from "../../domain/config/config";
+import { Window } from "../../engine/window";
+import { WindowResizeDelta } from "../../engine/window-resize-delta";
+import { Rectangle } from "../../utils/rectangle";
+import { clip, slide } from "../../utils/utils-service";
 import {
   adjustStackWeights,
   LayoutWeightMap,
@@ -10,24 +11,24 @@ import {
 } from "./layout-utils";
 
 export class TileLayout implements ILayout {
-  public static readonly MIN_MASTER_RATIO = 0.2;
-  public static readonly MAX_MASTER_RATIO = 0.8;
+  private static readonly MIN_MASTER_RATIO = 0.2;
+  private static readonly MAX_MASTER_RATIO = 0.8;
 
   public get enabled(): boolean {
-    return CONFIG.enableTileLayout;
+    return this.config.enableTileLayout;
   }
 
   private numMaster: number;
   private masterRatio: number; /* in ratio */
   private weights: LayoutWeightMap;
 
-  constructor() {
+  constructor(private config: IConfig) {
     this.numMaster = 1;
     this.masterRatio = 0.55;
     this.weights = new LayoutWeightMap();
   }
 
-  public adjust(area: Rect, tiles: Window[], basis: Window) {
+  public adjust(area: Rectangle, tiles: Window[], basis: Window) {
     if (tiles.length <= this.numMaster) {
       return;
     }
@@ -45,6 +46,7 @@ export class TileLayout implements ILayout {
           Math.floor(area.width * this.masterRatio) + delta.east;
         this.masterRatio = newMasterWidth / area.width;
       }
+
       let height = basis.geometry.height;
       if (idx < this.numMaster - 1 && Math.abs(delta.south) > 3) {
         adjustStackWeights(
@@ -54,9 +56,10 @@ export class TileLayout implements ILayout {
           this.weights,
           area.height,
           "forward",
-          CONFIG.tileLayoutGap
+          this.config.tileLayoutGap
         );
       }
+
       if (idx > 0 && delta.north !== 0) {
         adjustStackWeights(
           tiles.slice(0, this.numMaster),
@@ -65,7 +68,7 @@ export class TileLayout implements ILayout {
           this.weights,
           area.height,
           "backward",
-          CONFIG.tileLayoutGap
+          this.config.tileLayoutGap
         );
       }
     } else {
@@ -75,6 +78,7 @@ export class TileLayout implements ILayout {
           area.width - Math.floor(area.width * this.masterRatio) + delta.west;
         this.masterRatio = (area.width - newStackWidth) / area.width;
       }
+
       let height = basis.geometry.height;
       if (idx < tiles.length - 1 && Math.abs(delta.south) > 3) {
         adjustStackWeights(
@@ -84,9 +88,10 @@ export class TileLayout implements ILayout {
           this.weights,
           area.height,
           "forward",
-          CONFIG.tileLayoutGap
+          this.config.tileLayoutGap
         );
       }
+
       if (idx > this.numMaster && Math.abs(delta.north) > 3) {
         adjustStackWeights(
           tiles.slice(this.numMaster),
@@ -95,10 +100,11 @@ export class TileLayout implements ILayout {
           this.weights,
           area.height,
           "backward",
-          CONFIG.tileLayoutGap
+          this.config.tileLayoutGap
         );
       }
     }
+
     this.masterRatio = clip(
       this.masterRatio,
       TileLayout.MIN_MASTER_RATIO,
@@ -106,8 +112,8 @@ export class TileLayout implements ILayout {
     );
   }
 
-  public apply = (tiles: Window[], area: Rect): void => {
-    const gap = CONFIG.tileLayoutGap;
+  public apply = (tiles: Window[], area: Rectangle): void => {
+    const gap = this.config.tileLayoutGap;
     /* TODO: clean up cache / check invalidated(unmanage) entries */
 
     if (tiles.length <= this.numMaster) {
@@ -128,13 +134,14 @@ export class TileLayout implements ILayout {
 
       stackTilesWithWeight(
         tiles.slice(0, this.numMaster),
-        new Rect(area.x, area.y, masterWidth, area.height),
+        new Rectangle(area.x, area.y, masterWidth, area.height),
         this.weights,
         gap
       );
+
       stackTilesWithWeight(
         tiles.slice(this.numMaster),
-        new Rect(stackX, area.y, stackWidth, area.height),
+        new Rectangle(stackX, area.y, stackWidth, area.height),
         this.weights,
         gap
       );
@@ -179,12 +186,6 @@ export class TileLayout implements ILayout {
   }
 
   public toString(): string {
-    return (
-      "TileLayout(nmaster=" +
-      this.numMaster +
-      ", ratio=" +
-      this.masterRatio +
-      ")"
-    );
+    return `"TileLayout(nmaster=${this.numMaster}, ratio=${this.masterRatio})`;
   }
 }

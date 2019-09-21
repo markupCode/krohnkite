@@ -1,10 +1,10 @@
 import { ILayout } from "../architecture";
-import { FloatingLayout } from "../layouts/floating-layout";
-import { MonocleLayout } from "../layouts/monocle-layout";
-import { QuarterLayout } from "../layouts/quarter-layout";
-import { SpreadLayout } from "../layouts/spread-layout";
-import { StairLayout } from "../layouts/stair-layout";
-import { TileLayout } from "../layouts/tile-layout";
+import { FloatingLayout } from "../infrastructure/layouts/floating-layout";
+import { MonocleLayout } from "../infrastructure/layouts/monocle-layout";
+import { QuarterLayout } from "../infrastructure/layouts/quarter-layout";
+import { SpreadLayout } from "../infrastructure/layouts/spread-layout";
+import { StairLayout } from "../infrastructure/layouts/stair-layout";
+import { TileLayout } from "../infrastructure/layouts/tile-layout";
 
 export class LayoutStoreEntry {
   public layouts: ILayout[];

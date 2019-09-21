@@ -1,5 +1,5 @@
 import { Window } from "./engine/window";
-import { Rect } from "./util/rect";
+import { Rectangle } from "./utils/rectangle";
 
 export enum Shortcut {
   Left,
@@ -37,12 +37,12 @@ export enum WindowState {
 export interface IDriverWindow {
   readonly context: IDriverContext;
   readonly fullScreen: boolean;
-  readonly geometry: Rect;
+  readonly geometry: Rectangle;
   readonly id: string;
   readonly shouldIgnore: boolean;
   readonly shouldFloat: boolean;
 
-  commit(geometry?: Rect, noBorder?: boolean, keepBelow?: boolean): void;
+  commit(geometry?: Rectangle, noBorder?: boolean, keepBelow?: boolean): void;
   visible(ctx: IDriverContext): boolean;
 }
 
@@ -55,7 +55,7 @@ export interface IDriver {
   forEachScreen(func: (ctx: IDriverContext) => void): void;
   getCurrentContext(): IDriverContext;
   getCurrentWindow(): Window | null;
-  getWorkingArea(ctx: IDriverContext): Rect;
+  getWorkingArea(ctx: IDriverContext): Rectangle;
   setCurrentWindow(window: Window): void;
   setTimeout(func: () => void, timeout: number): void;
 }
@@ -86,8 +86,8 @@ export interface IEngine {
 export interface ILayout {
   readonly enabled: boolean;
 
-  adjust?(area: Rect, tiles: Window[], basis: Window): void;
-  apply(tiles: Window[], area: Rect, workingArea?: Rect): void;
+  adjust?(area: Rectangle, tiles: Window[], basis: Window): void;
+  apply(tiles: Window[], area: Rectangle, workingArea?: Rectangle): void;
   toString(): string;
 
   handleShortcut?(input: Shortcut, data?: any): boolean;

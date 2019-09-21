@@ -1,5 +1,5 @@
 import { IDriverContext, ILayout } from "../architecture";
-import { FloatingLayout } from "../layouts/floating-layout";
+import { FloatingLayout } from "../infrastructure/layouts/floating-layout";
 import { LayoutStoreEntry } from "./layout-store-entry";
 
 export class LayoutStore {

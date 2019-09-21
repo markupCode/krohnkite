@@ -1,8 +1,8 @@
-import { Rect } from "../util/rect";
+import { Rectangle } from "../utils/rectangle";
 import { Window } from "./window";
 
 export class WindowResizeDelta {
-  public readonly diff: Rect;
+  public readonly diff: Rectangle;
 
   public readonly east: number;
   public readonly west: number;

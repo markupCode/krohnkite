@@ -1,19 +1,20 @@
-import { CONFIG, ILayout, Shortcut } from "../architecture";
-import { Window } from "../engine/window";
-import { Rect } from "../util/rect";
+import { ILayout, Shortcut } from "../../architecture";
+import { IConfig } from "../../domain/config/config";
+import { Window } from "../../engine/window";
+import { Rectangle } from "../../utils/rectangle";
 
 export class SpreadLayout implements ILayout {
   public get enabled(): boolean {
-    return CONFIG.enableSpreadLayout;
+    return this.config.enableSpreadLayout;
   }
 
   private space: number; /* in ratio */
 
-  constructor() {
+  constructor(private config: IConfig) {
     this.space = 0.07;
   }
 
-  public apply = (tiles: Window[], area: Rect): void => {
+  public apply = (tiles: Window[], area: Rectangle): void => {
     let numTiles = tiles.length;
     const spaceWidth = Math.floor(area.width * this.space);
     let cardWidth = area.width - spaceWidth * (numTiles - 1);
@@ -26,7 +27,7 @@ export class SpreadLayout implements ILayout {
     }
 
     for (let i = 0; i < tiles.length; i++) {
-      tiles[i].geometry = new Rect(
+      tiles[i].geometry = new Rectangle(
         area.x + (i < numTiles ? spaceWidth * (numTiles - i - 1) : 0),
         area.y,
         cardWidth,

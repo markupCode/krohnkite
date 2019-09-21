@@ -1,4 +1,4 @@
-export class Rect {
+export class Rectangle {
   public readonly height: number;
   public readonly width: number;
   public readonly x: number;
@@ -19,7 +19,7 @@ export class Rect {
     this.y = y;
   }
 
-  public equals(other: Rect) {
+  public equals(other: Rectangle) {
     return (
       this.x === other.x &&
       this.y === other.y &&
@@ -28,8 +28,13 @@ export class Rect {
     );
   }
 
-  public gap(left: number, right: number, top: number, bottom: number): Rect {
-    return new Rect(
+  public gap(
+    left: number,
+    right: number,
+    top: number,
+    bottom: number
+  ): Rectangle {
+    return new Rectangle(
       this.x + left,
       this.y + top,
       this.width - (left + right),
@@ -37,7 +42,7 @@ export class Rect {
     );
   }
 
-  public includes(other: Rect): boolean {
+  public includes(other: Rectangle): boolean {
     return (
       this.x <= other.x &&
       this.y <= other.y &&
@@ -46,8 +51,8 @@ export class Rect {
     );
   }
 
-  public subtract(other: Rect) {
-    return new Rect(
+  public subtract(other: Rectangle) {
+    return new Rectangle(
       this.x - other.x,
       this.y - other.y,
       this.width - other.width,
@@ -56,6 +61,8 @@ export class Rect {
   }
 
   public toString(): string {
-    return "Rect(" + [this.x, this.y, this.width, this.height].join(", ") + ")";
+    return (
+      "Rectangle(" + [this.x, this.y, this.width, this.height].join(", ") + ")"
+    );
   }
 }

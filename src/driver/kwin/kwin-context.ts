@@ -1,5 +1,4 @@
 import { IDriverContext } from "../../architecture";
-import { KWINCONFIG } from "../../infrastructure/config/kwin-config-factory";
 
 export class KWinContext implements IDriverContext {
   public readonly screen: number;

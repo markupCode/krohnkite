@@ -1,5 +1,5 @@
 import { IDriverContext, IDriverWindow } from "../../architecture";
-import { Rect } from "../../util/rect";
+import { Rectangle } from "../../utils/rectangle";
 import { TestContext } from "./test-context";
 
 export class TestWindow implements IDriverWindow {
@@ -11,13 +11,13 @@ export class TestWindow implements IDriverWindow {
 
   public context: TestContext;
   public fullScreen: boolean;
-  public geometry: Rect;
+  public geometry: Rectangle;
   public keepBelow: boolean;
   public noBorder: boolean;
 
   constructor(
     ctx: TestContext,
-    geometry?: Rect,
+    geometry?: Rectangle,
     ignore?: boolean,
     float?: boolean
   ) {
@@ -27,12 +27,12 @@ export class TestWindow implements IDriverWindow {
     this.shouldIgnore = ignore !== undefined ? ignore : false;
     this.context = ctx;
     this.fullScreen = false;
-    this.geometry = geometry || new Rect(0, 0, 100, 100);
+    this.geometry = geometry || new Rectangle(0, 0, 100, 100);
     this.keepBelow = false;
     this.noBorder = false;
   }
 
-  public commit(geometry?: Rect, noBorder?: boolean, keepBelow?: boolean) {
+  public commit(geometry?: Rectangle, noBorder?: boolean, keepBelow?: boolean) {
     if (geometry) {
       this.geometry = geometry;
     }

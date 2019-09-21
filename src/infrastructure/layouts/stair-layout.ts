@@ -1,19 +1,20 @@
-import { CONFIG, ILayout, Shortcut } from "../architecture";
-import { Window } from "../engine/window";
-import { Rect } from "../util/rect";
+import { ILayout, Shortcut } from "../../architecture";
+import { IConfig } from "../../domain/config/config";
+import { Window } from "../../engine/window";
+import { Rectangle } from "../../utils/rectangle";
 
 export class StairLayout implements ILayout {
   public get enabled(): boolean {
-    return CONFIG.enableStairLayout;
+    return this.config.enableStairLayout;
   }
 
-  private space: number; /* in PIXELS */
+  private space: number; /* in pixels */
 
-  constructor() {
+  constructor(private config: IConfig) {
     this.space = 24;
   }
 
-  public apply = (tiles: Window[], area: Rect): void => {
+  public apply = (tiles: Window[], area: Rectangle): void => {
     const len = tiles.length;
     const space = this.space;
 
@@ -22,7 +23,7 @@ export class StairLayout implements ILayout {
     for (let i = 0; i < len; i++) {
       const dx = space * (len - i - 1);
       const dy = space * i;
-      tiles[i].geometry = new Rect(
+      tiles[i].geometry = new Rectangle(
         area.x + dx,
         area.y + dy,
         area.width - dx,

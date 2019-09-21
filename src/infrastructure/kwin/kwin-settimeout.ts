@@ -1,5 +1,3 @@
-import { debugObj } from "../../util/debug";
-
 export class KWinTimerPool {
   public static readonly instance = new KWinTimerPool();
 
@@ -9,7 +7,8 @@ export class KWinTimerPool {
     this.timers = [];
   }
 
-  public setTimeout(func: () => void, timeout: number) {
+  public setTimeout(action: () => void, timeout: number) {
+    // TODO: simplify
     const timer: QQmlTimer =
       this.timers.pop() ||
       Qt.createQmlObject("import QtQuick 2.0; Timer {}", scriptRoot);
@@ -17,16 +16,19 @@ export class KWinTimerPool {
     const callback = () => {
       try {
         timer.triggered.disconnect(callback);
-      } catch (e) {
-        /* ignore */
+      } catch (exception) {
+        // TODO: log the exception
       }
+
       try {
-        func();
-      } catch (e) {
-        /* ignore */
+        action();
+      } catch (exception) {
+        // TODO: log the exception
       }
+
       this.timers.push(timer);
-      debugObj(() => ["setTimeout/callback", { poolSize: this.timers.length }]);
+
+      // debugObj(() => ["setTimeout/callback", { poolSize: this.timers.length }]);
     };
 
     timer.interval = timeout;
@@ -36,6 +38,6 @@ export class KWinTimerPool {
   }
 }
 
-export function KWinSetTimeout(func: () => void, timeout: number) {
-  KWinTimerPool.instance.setTimeout(func, timeout);
+export function KWinSetTimeout(action: () => void, timeout: number) {
+  KWinTimerPool.instance.setTimeout(action, timeout);
 }

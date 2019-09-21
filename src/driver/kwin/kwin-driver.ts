@@ -8,17 +8,20 @@ import {
 import { TilingController } from "../../engine/tiling-controller";
 import { TilingEngine } from "../../engine/tiling-engine";
 import { Window } from "../../engine/window";
-import { MonocleLayout } from "../../layouts/monocle-layout";
-import { SpreadLayout } from "../../layouts/spread-layout";
-import { TileLayout } from "../../layouts/tile-layout";
-import { debug, debugObj } from "../../util/debug";
-import { toRect } from "../../util/kwinutil";
-import { Rect } from "../../util/rect";
-import { KWINCONFIG, KWinConfig } from "../../infrastructure/config/kwin-config-factory";
+import { MonocleLayout } from "../../infrastructure/layouts/monocle-layout";
+import { SpreadLayout } from "../../infrastructure/layouts/spread-layout";
+import { TileLayout } from "../../infrastructure/layouts/tile-layout";
+import { debug, debugObj } from "../../utils/debug";
+import { toRectangle } from "../../utils/ractangle-mappers";
+import { Rectangle } from "../../utils/rectangle";
+import {
+  KWINCONFIG,
+  KWinConfig
+} from "../../infrastructure/config/kwin-config-factory";
 import { KWinContext } from "./kwin-context";
-import { KWinSetTimeout } from "./kwin-settimeout";
+import { KWinSetTimeout } from "../../infrastructure/kwin/kwin-settimeout";
 import { KWinWindow } from "./kwin-window";
-import { StairLayout } from "../../layouts/stair-layout";
+import { StairLayout } from "../../infrastructure/layouts/stair-layout";
 
 /**
  * Abstracts KDE implementation specific details.
@@ -88,9 +91,9 @@ export class KWinDriver implements IDriver {
     return this.queryWindow(client);
   }
 
-  public getWorkingArea(ctx: IDriverContext): Rect {
+  public getWorkingArea(ctx: IDriverContext): Rectangle {
     const kctx = ctx as KWinContext;
-    return toRect(
+    return toRectangle(
       workspace.clientArea(
         KWin.PlacementArea,
         kctx.screen,

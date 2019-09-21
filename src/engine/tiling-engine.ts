@@ -8,8 +8,8 @@ import {
 import { IConfig } from "../domain/config/config";
 import { ILogger } from "../domain/logging/logger";
 import { KWinContext } from "../driver/kwin/kwin-context";
-import { wrapIndex } from "../util/func";
-import { Rect } from "../util/rect";
+import { wrapIndex } from "../utils/utils-service";
+import { Rectangle } from "../utils/rectangle";
 import { LayoutStore } from "./layout-store";
 import { Window } from "./window";
 import { WindowStore } from "./window-store";
@@ -34,7 +34,7 @@ export class TilingEngine implements IEngine {
     if (layout.adjust) {
       const fullArea = this.driver.getWorkingArea(context);
 
-      const area = new Rect(
+      const area = new Rectangle(
         fullArea.x + this.config.screenGapLeft,
         fullArea.y + this.config.screenGapTop,
         fullArea.width -
@@ -60,7 +60,7 @@ export class TilingEngine implements IEngine {
     const layout = this.layouts.getCurrentLayout(context);
 
     const fullArea = this.driver.getWorkingArea(context);
-    const workingArea = new Rect(
+    const workingArea = new Rectangle(
       fullArea.x + this.config.screenGapLeft,
       fullArea.y + this.config.screenGapTop,
       fullArea.width - (this.config.screenGapLeft + this.config.screenGapRight),
