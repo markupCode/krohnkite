@@ -8,9 +8,9 @@ import {
 import { IConfig } from "../domain/config/config";
 import { ILogger } from "../domain/logging/logger";
 import { KWinContext } from "../driver/kwin/kwin-context";
-import { wrapIndex } from "../utils/utils-service";
+import { LayoutStore } from "../infrastructure/layouts/layout-store";
 import { Rectangle } from "../utils/rectangle";
-import { LayoutStore } from "./layout-store";
+import { wrapIndex } from "../utils/utils-service";
 import { Window } from "./window";
 import { WindowStore } from "./window-store";
 

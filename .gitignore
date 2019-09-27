@@ -3,6 +3,8 @@
 /TODO.md
 /krohnkite.js
 
+/dist/
+
 /*.qml
 *.kwinscript
 *.bak

@@ -1,7 +1,7 @@
-import { ILayout } from "../../architecture";
-import { IConfig } from "../../domain/config/config";
-import { Window } from "../../engine/window";
-import { Rectangle } from "../../utils/rectangle";
+import { IConfig } from "../../../domain/config/config";
+import { ILayout } from "../../../domain/layouts/layout";
+import { Window } from "../../../engine/window";
+import { Rectangle } from "../../../utils/rectangle";
 
 export class MonocleLayout implements ILayout {
   public get enabled(): boolean {

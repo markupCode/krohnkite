@@ -8,9 +8,9 @@ import {
 import { TilingController } from "../../engine/tiling-controller";
 import { TilingEngine } from "../../engine/tiling-engine";
 import { Window } from "../../engine/window";
-import { MonocleLayout } from "../../infrastructure/layouts/monocle-layout";
-import { SpreadLayout } from "../../infrastructure/layouts/spread-layout";
-import { TileLayout } from "../../infrastructure/layouts/tile-layout";
+import { MonocleLayout } from "../../infrastructure/layouts/implementations/monocle-layout";
+import { SpreadLayout } from "../../infrastructure/layouts/implementations/spread-layout";
+import { TileLayout } from "../../infrastructure/layouts/implementations/tile-layout";
 import { debug, debugObj } from "../../utils/debug";
 import { toRectangle } from "../../utils/ractangle-mappers";
 import { Rectangle } from "../../utils/rectangle";
@@ -21,7 +21,7 @@ import {
 import { KWinContext } from "./kwin-context";
 import { KWinSetTimeout } from "../../infrastructure/kwin/kwin-settimeout";
 import { KWinWindow } from "./kwin-window";
-import { StairLayout } from "../../infrastructure/layouts/stair-layout";
+import { StairLayout } from "../../infrastructure/layouts/implementations/stair-layout";
 
 /**
  * Abstracts KDE implementation specific details.

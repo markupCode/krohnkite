@@ -1,14 +1,15 @@
-import { ILayout, Shortcut } from "../../architecture";
-import { IConfig } from "../../domain/config/config";
-import { Window } from "../../engine/window";
-import { WindowResizeDelta } from "../../engine/window-resize-delta";
-import { Rectangle } from "../../utils/rectangle";
-import { clip, slide } from "../../utils/utils-service";
+import { Shortcut } from "../../../architecture";
+import { IConfig } from "../../../domain/config/config";
+import { ILayout } from "../../../domain/layouts/layout";
+import { Window } from "../../../engine/window";
+import { WindowResizeDelta } from "../../../engine/window-resize-delta";
+import { Rectangle } from "../../../utils/rectangle";
+import { clip, slide } from "../../../utils/utils-service";
 import {
   adjustStackWeights,
   LayoutWeightMap,
   stackTilesWithWeight
-} from "./layout-utils";
+} from "../layout-utils";
 
 export class TileLayout implements ILayout {
   private static readonly MIN_MASTER_RATIO = 0.2;

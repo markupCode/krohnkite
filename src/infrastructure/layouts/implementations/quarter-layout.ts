@@ -1,21 +1,23 @@
-import { CONFIG, ILayout, WindowState } from "../../architecture";
-import { Window } from "../../engine/window";
-import { WindowResizeDelta } from "../../engine/window-resize-delta";
-import { clip } from "../../utils/utils-service";
-import { Rectangle } from "../../utils/rectangle";
+import { WindowState } from "../../../architecture";
+import { IConfig } from "../../../domain/config/config";
+import { ILayout } from "../../../domain/layouts/layout";
+import { Window } from "../../../engine/window";
+import { WindowResizeDelta } from "../../../engine/window-resize-delta";
+import { Rectangle } from "../../../utils/rectangle";
+import { clip } from "../../../utils/utils-service";
 
 export class QuarterLayout implements ILayout {
   public static readonly MAX_PROPORTION = 0.8;
 
   public get enabled(): boolean {
-    return CONFIG.enableQuarterLayout;
+    return this.config.enableQuarterLayout;
   }
 
   private lhsplit: number;
   private rhsplit: number;
   private vsplit: number;
 
-  public constructor() {
+  public constructor(private config: IConfig) {
     this.lhsplit = 0.5;
     this.rhsplit = 0.5;
     this.vsplit = 0.5;
@@ -90,8 +92,8 @@ export class QuarterLayout implements ILayout {
       return;
     }
 
-    const gap1 = Math.floor(CONFIG.tileLayoutGap / 2);
-    const gap2 = CONFIG.tileLayoutGap - gap1;
+    const gap1 = Math.floor(this.config.tileLayoutGap / 2);
+    const gap2 = this.config.tileLayoutGap - gap1;
 
     const leftWidth = Math.floor(area.width * this.vsplit);
     const rightWidth = area.width - leftWidth;
