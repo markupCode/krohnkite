@@ -1,27 +1,19 @@
-import {
-  CONFIG,
-  IDriver,
-  IDriverContext,
-  Shortcut,
-  WindowState
-} from "../../architecture";
-import { TilingController } from "../../engine/tiling-controller";
-import { TilingEngine } from "../../engine/tiling-engine";
-import { Window } from "../../engine/window";
-import { MonocleLayout } from "../../infrastructure/layouts/implementations/monocle-layout";
-import { SpreadLayout } from "../../infrastructure/layouts/implementations/spread-layout";
-import { TileLayout } from "../../infrastructure/layouts/implementations/tile-layout";
-import { debug, debugObj } from "../../utils/debug";
-import { toRectangle } from "../../utils/ractangle-mappers";
+import { Shortcut } from "../../domain/config/shortcut";
+import { IDriver } from "../../domain/driver/driver";
+import { IDriverContext } from "../../domain/driver/driver-context";
+import { WindowState } from "../../domain/window/window-state";
+import { KWinSetTimeout } from "../../utils/kwin/kwin-settimeout";
 import { Rectangle } from "../../utils/rectangle";
-import {
-  KWINCONFIG,
-  KWinConfig
-} from "../../infrastructure/config/kwin-config-factory";
+import { toRectangle } from "../../utils/rectangle-mappers";
+import { MonocleLayout } from "../layouts/implementations/monocle-layout";
+import { SpreadLayout } from "../layouts/implementations/spread-layout";
+import { StairLayout } from "../layouts/implementations/stair-layout";
+import { TileLayout } from "../layouts/implementations/tile-layout";
+import { TilingController } from "../tiling/tiling-controller";
+import { TilingEngine } from "../tiling/tiling-engine";
+import { Window } from "../window/window";
 import { KWinContext } from "./kwin-context";
-import { KWinSetTimeout } from "../../infrastructure/kwin/kwin-settimeout";
 import { KWinWindow } from "./kwin-window";
-import { StairLayout } from "../../infrastructure/layouts/implementations/stair-layout";
 
 /**
  * Abstracts KDE implementation specific details.
@@ -45,7 +37,7 @@ export class KWinDriver implements IDriver {
 
   public main() {
     // CONFIG = KWINCONFIG = new KWinConfig();
-    debug(() => "Config: " + KWINCONFIG);
+    // debug(() => "Config: " + KWINCONFIG);
 
     this.bindEvents();
     this.bindShortcut();
@@ -88,6 +80,7 @@ export class KWinDriver implements IDriver {
     if (!client) {
       return null;
     }
+    
     return this.queryWindow(client);
   }
 

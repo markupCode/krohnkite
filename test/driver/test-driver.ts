@@ -1,6 +1,7 @@
-import { CONFIG, IDriver, IDriverContext } from "../../architecture";
-import { Window } from "../../engine/window";
-import { Rectangle } from "../../utils/rectangle";
+import { IDriver } from "../../src/domain/driver/driver";
+import { IDriverContext } from "../../src/domain/driver/driver-context";
+import { Window } from "../../src/infrastructure/window/window";
+import { Rectangle } from "../../src/utils/rectangle";
 import { TestContext } from "./test-context";
 
 export class TestDriver implements IDriver {
@@ -52,10 +53,11 @@ export class TestDriver implements IDriver {
   }
 }
 
-export function setTestConfig(name: string, value: any) {
-  // if (!CONFIG) {
-  //   CONFIG = {} as any;
-  // }
+// TODO: make decision to fix after refactor process
+// export function setTestConfig(name: string, value: any) {
+//   if (!CONFIG) {
+//     CONFIG = {} as any;
+//   }
 
-  (CONFIG as any)[name] = value;
-}
+//   (CONFIG as any)[name] = value;
+// }

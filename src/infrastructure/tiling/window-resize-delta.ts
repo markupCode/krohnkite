@@ -1,5 +1,5 @@
-import { Rectangle } from "../utils/rectangle";
-import { Window } from "./window";
+import { Rectangle } from "../../utils/rectangle";
+import { Window } from "../window/window";
 
 export class WindowResizeDelta {
   public readonly diff: Rectangle;

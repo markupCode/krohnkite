@@ -1,4 +1,4 @@
-import { Window } from "../../engine/window";
+import { Window } from "../window/window";
 import { Rectangle } from "../../utils/rectangle";
 
 export function stackTiles(tiles: Window[], area: Rectangle, gap = 0) {

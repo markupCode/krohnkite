@@ -1,4 +1,4 @@
-import { IDriverContext } from "../../architecture";
+import { IDriverContext } from "../../src/domain/driver/driver-context";
 
 export class TestContext implements IDriverContext {
   public readonly screen: number;

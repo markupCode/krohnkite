@@ -1,5 +1,6 @@
-import { IDriverContext, IDriverWindow } from "../../architecture";
-import { Rectangle } from "../../utils/rectangle";
+import { IDriverContext } from "../../src/domain/driver/driver-context";
+import { IDriverWindow } from "../../src/domain/driver/driver-window";
+import { Rectangle } from "../../src/utils/rectangle";
 import { TestContext } from "./test-context";
 
 export class TestWindow implements IDriverWindow {

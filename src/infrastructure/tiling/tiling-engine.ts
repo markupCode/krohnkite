@@ -1,22 +1,17 @@
-import {
-  IDriver,
-  IDriverContext,
-  IEngine,
-  Shortcut,
-  WindowState
-} from "../architecture";
-import { IConfig } from "../domain/config/config";
-import { ILogger } from "../domain/logging/logger";
-import { KWinContext } from "../driver/kwin/kwin-context";
-import { LayoutStore } from "../infrastructure/layouts/layout-store";
-import { Rectangle } from "../utils/rectangle";
-import { wrapIndex } from "../utils/utils-service";
-import { Window } from "./window";
-import { WindowStore } from "./window-store";
+import { IConfig } from "../../domain/config/config";
+import { Shortcut } from "../../domain/config/shortcut";
+import { IDriver } from "../../domain/driver/driver";
+import { IDriverContext } from "../../domain/driver/driver-context";
+import { ILogger } from "../../domain/logging/logger";
+import { IEngine } from "../../domain/tiling/engine";
+import { WindowState } from "../../domain/window/window-state";
+import { Rectangle } from "../../utils/rectangle";
+import { wrapIndex } from "../../utils/utils-service";
+import { KWinContext } from "../driver/kwin-context";
+import { LayoutStore } from "../layouts/layout-store";
+import { Window } from "../window/window";
+import { WindowStore } from "../window/window-store";
 
-/**
- * Maintains tiling context and performs various tiling actions
- */
 export class TilingEngine implements IEngine {
   constructor(
     private driver: IDriver,

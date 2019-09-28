@@ -1,4 +1,4 @@
-import { IDriverContext, WindowState } from "../architecture";
+import { IDriverContext, WindowState } from "../../architecture";
 import { Window } from "./window";
 
 export class WindowStore {

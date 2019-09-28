@@ -1,6 +1,6 @@
 import { WindowState } from "../../../architecture";
 import { ILayout } from "../../../domain/layouts/layout";
-import { Window } from "../../../engine/window";
+import { Window } from "../../window/window";
 import { Rectangle } from "../../../utils/rectangle";
 
 export class FloatingLayout implements ILayout {

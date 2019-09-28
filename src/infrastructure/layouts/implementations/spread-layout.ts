@@ -1,7 +1,7 @@
 import { Shortcut } from "../../../architecture";
 import { IConfig } from "../../../domain/config/config";
 import { ILayout } from "../../../domain/layouts/layout";
-import { Window } from "../../../engine/window";
+import { Window } from "../../window/window";
 import { Rectangle } from "../../../utils/rectangle";
 
 export class SpreadLayout implements ILayout {

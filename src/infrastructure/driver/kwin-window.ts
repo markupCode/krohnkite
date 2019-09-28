@@ -1,15 +1,17 @@
 import { IDriverContext, IDriverWindow } from "../../architecture";
-import { debugObj } from "../../utils/debug";
-import { clip, matchWords } from "../../utils/utils-service";
-import { toQRectangle, toRectangle } from "../../utils/ractangle-mappers";
+import { IConfig } from "../../domain/config/config";
+import { ILogger } from "../../domain/logging/logger";
 import { Rectangle } from "../../utils/rectangle";
-import { KWINCONFIG } from "../../infrastructure/config/kwin-config-factory";
+import { toQRectangle, toRectangle } from "../../utils/rectangle-mappers";
+import { clip, matchWords } from "../../utils/utils-service";
 import { KWinContext } from "./kwin-context";
 
 export class KWinWindow implements IDriverWindow {
   public static generateID(client: KWin.Client) {
     return String(client) + "/" + client.windowId;
   }
+
+  private static readonly PLASMA_SHELL_RESORCE_CLASS = "plasmashell";
 
   public readonly client: KWin.Client;
   public readonly id: string;
@@ -40,29 +42,55 @@ export class KWinWindow implements IDriverWindow {
 
   public get shouldIgnore(): boolean {
     const resourceClass = String(this.client.resourceClass);
-    return (
+
+    if (
       this.client.specialWindow ||
-      resourceClass === "plasmashell" ||
-      KWINCONFIG.ignoreClass.indexOf(resourceClass) >= 0 ||
-      matchWords(this.client.caption, KWINCONFIG.ignoreTitle) >= 0
-    );
+      resourceClass === KWinWindow.PLASMA_SHELL_RESORCE_CLASS
+    ) {
+      return true;
+    }
+
+    if (
+      this.config.ignoreClass.indexOf(resourceClass) >= 0 ||
+      matchWords(this.client.caption, this.config.ignoreTitle) >= 0
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   public get shouldFloat(): boolean {
     const resourceClass = String(this.client.resourceClass);
-    return (
-      this.client.modal ||
-      !this.client.resizeable ||
-      (KWINCONFIG.floatUtility &&
-        (this.client.dialog || this.client.splash || this.client.utility)) ||
-      KWINCONFIG.floatingClass.indexOf(resourceClass) >= 0 ||
-      matchWords(this.client.caption, KWINCONFIG.floatingTitle) >= 0
-    );
+
+    if (this.client.modal || !this.client.resizeable) {
+      return true;
+    }
+
+    if (
+      this.config.floatUtility &&
+      (this.client.dialog || this.client.splash || this.client.utility)
+    ) {
+      return true;
+    }
+
+    if (
+      this.config.floatingClass.indexOf(resourceClass) >= 0 ||
+      matchWords(this.client.caption, this.config.floatingTitle) >= 0
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   private readonly _bakNoBorder: boolean;
 
-  constructor(client: KWin.Client) {
+  constructor(
+    private config: IConfig,
+    private logger: ILogger,
+    client: KWin.Client
+  ) {
     this.client = client;
     this.id = KWinWindow.generateID(client);
     this._bakNoBorder = client.noBorder;
@@ -83,7 +111,8 @@ export class KWinWindow implements IDriverWindow {
 
     if (geometry !== undefined) {
       geometry = this.adjustGeometry(geometry);
-      if (KWINCONFIG.preventProtrusion) {
+
+      if (this.config.preventProtrusion) {
         const area = toRectangle(
           workspace.clientArea(
             KWin.PlacementArea,
@@ -91,6 +120,7 @@ export class KWinWindow implements IDriverWindow {
             workspace.currentDesktop
           )
         );
+
         if (!area.includes(geometry)) {
           /* assume windows will extrude only through right and bottom edges */
           const x = geometry.x + Math.min(area.maxX - geometry.maxX, 0);
@@ -99,31 +129,43 @@ export class KWinWindow implements IDriverWindow {
           geometry = this.adjustGeometry(geometry);
         }
       }
+
       this.client.geometry = toQRectangle(geometry);
     }
   }
 
   public toString(): string {
     /* using a shorthand name to keep debug message tidy */
-    return (
-      "KWin(" +
-      this.client.windowId.toString(16) +
-      "." +
-      this.client.resourceClass +
-      ")"
-    );
+    return `KWin(${this.client.windowId.toString(16)}.${
+      this.client.resourceClass
+    })`;
   }
 
-  public visible(ctx: IDriverContext): boolean {
-    const kctx = ctx as KWinContext;
-    return (
-      !this.client.minimized &&
-      (this.client.desktop === kctx.desktop ||
-        this.client.desktop === -1) /* on all desktop */ &&
-      (this.client.activities.length === 0 /* on all activities */ ||
-        this.client.activities.indexOf(kctx.activity) !== -1) &&
-      this.client.screen === kctx.screen
-    );
+  public visible(context: IDriverContext): boolean {
+    // TODO: how it happened?
+    const kwinContext = context as KWinContext;
+
+    if (this.client.minimized) {
+      return false;
+    }
+
+    // on all desktop
+    if (
+      this.client.desktop !== kwinContext.desktop &&
+      this.client.desktop !== -1
+    ) {
+      return false;
+    }
+
+    // on all activities
+    if (
+      this.client.activities.length !== 0 &&
+      this.client.activities.indexOf(kwinContext.activity) === -1
+    ) {
+      return false;
+    }
+
+    return this.client.screen === kwinContext.screen;
   }
 
   private adjustGeometry(geometry: Rectangle): Rectangle {
@@ -132,33 +174,34 @@ export class KWinWindow implements IDriverWindow {
 
     /* do not resize fixed-size windows */
     if (!this.client.resizeable) {
-      width = this.client.geometry.width;
-      height = this.client.geometry.height;
-    } else {
-      /* respect resize increment */
-      if (
-        !(
-          this.client.basicUnit.width === 1 &&
-          this.client.basicUnit.height === 1
-        )
-      ) {
-        /* NOT free-size */
-        [width, height] = this.applyResizeIncrement(geometry);
-      }
-
-      /* respect min/max size limit */
-      width = clip(width, this.client.minSize.width, this.client.maxSize.width);
-      height = clip(
-        height,
-        this.client.minSize.height,
-        this.client.maxSize.height
+      return new Rectangle(
+        geometry.x,
+        geometry.y,
+        this.client.geometry.width,
+        this.client.geometry.height
       );
     }
+
+    /* respect resize increment */
+    if (
+      !(this.client.basicUnit.width === 1 && this.client.basicUnit.height === 1)
+    ) {
+      /* NOT free-size */
+      [width, height] = this.applyResizeIncrement(geometry);
+    }
+
+    /* respect min/max size limit */
+    width = clip(width, this.client.minSize.width, this.client.maxSize.width);
+    height = clip(
+      height,
+      this.client.minSize.height,
+      this.client.maxSize.height
+    );
 
     return new Rectangle(geometry.x, geometry.y, width, height);
   }
 
-  private applyResizeIncrement(geom: Rectangle): [number, number] {
+  private applyResizeIncrement(geometry: Rectangle): [number, number] {
     const unit = this.client.basicUnit;
     const base = this.client.minSize;
 
@@ -167,21 +210,21 @@ export class KWinWindow implements IDriverWindow {
       this.client.geometry.height - this.client.clientSize.height;
 
     const quotWidth = Math.floor(
-      (geom.width - base.width - padWidth) / unit.width
+      (geometry.width - base.width - padWidth) / unit.width
     );
     const quotHeight = Math.floor(
-      (geom.height - base.height - padHeight) / unit.height
+      (geometry.height - base.height - padHeight) / unit.height
     );
 
     const newWidth = base.width + unit.width * quotWidth + padWidth;
     const newHeight = base.height + unit.height * quotHeight + padHeight;
 
-    debugObj(() => [
+    this.logger.debug(() => [
       "applyResizeIncrement",
       {
         unit,
         base,
-        geom,
+        geom: geometry,
         pad: [padWidth, padHeight].join("x"),
         size: [newWidth, newHeight].join("x")
       }

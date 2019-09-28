@@ -1,6 +1,6 @@
-import { Shortcut } from "../../architecture";
-import { Window } from "../../engine/window";
+import { Window } from "../../infrastructure/window/window";
 import { Rectangle } from "../../utils/rectangle";
+import { Shortcut } from "../config/shortcut";
 
 export interface ILayout {
   readonly enabled: boolean;

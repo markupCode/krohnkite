@@ -3,11 +3,11 @@ import {
   IDriverContext,
   Shortcut,
   WindowState
-} from "../architecture";
-import { IConfig } from "../domain/config/config";
-import { ILogger } from "../domain/logging/logger";
+} from "../../architecture";
+import { IConfig } from "../../domain/config/config";
+import { ILogger } from "../../domain/logging/logger";
 import { TilingEngine } from "./tiling-engine";
-import { Window } from "./window";
+import { Window } from "../window/window";
 
 /**
  * A thin layer which translates WM events to tiling actions.

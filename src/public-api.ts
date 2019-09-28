@@ -1,1 +1,1 @@
-export { KWinDriver } from "./driver/kwin/kwin-driver";
+export { KWinDriver } from "./infrastructure/driver/kwin-driver";

@@ -1,6 +1,6 @@
-import { IDriverContext, IDriverWindow, WindowState } from "../architecture";
-import { ILogger } from "../domain/logging/logger";
-import { Rectangle } from "../utils/rectangle";
+import { IDriverContext, IDriverWindow, WindowState } from "../../architecture";
+import { ILogger } from "../../domain/logging/logger";
+import { Rectangle } from "../../utils/rectangle";
 
 export class Window {
   public readonly id: string;

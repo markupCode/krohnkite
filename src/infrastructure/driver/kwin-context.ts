@@ -1,4 +1,5 @@
-import { IDriverContext } from "../../architecture";
+import { IConfig } from "../../domain/config/config";
+import { IDriverContext } from "../../domain/driver/driver-context";
 
 export class KWinContext implements IDriverContext {
   public readonly screen: number;
@@ -10,26 +11,33 @@ export class KWinContext implements IDriverContext {
   public get id(): string {
     if (!this._path) {
       this._path = String(this.screen);
-      if (KWINCONFIG.layoutPerActivity) {
+      
+      if (this.config.layoutPerActivity) {
         this._path += "@" + this.activity;
       }
 
-      if (KWINCONFIG.layoutPerDesktop) {
+      if (this.config.layoutPerDesktop) {
         this._path += "#" + this.desktop;
       }
     }
+
     return this._path;
   }
 
   public get ignore(): boolean {
     const activityName = activityInfo.activityName(this.activity);
     return (
-      KWINCONFIG.ignoreActivity.indexOf(activityName) >= 0 ||
-      KWINCONFIG.ignoreScreen.indexOf(this.screen) >= 0
+      this.config.ignoreActivity.indexOf(activityName) >= 0 ||
+      this.config.ignoreScreen.indexOf(this.screen) >= 0
     );
   }
 
-  constructor(screen: number, activity: string, desktop: number) {
+  constructor(
+    private config: IConfig,
+    screen: number,
+    activity: string,
+    desktop: number
+  ) {
     this.screen = screen;
     this.activity = activity;
     this.desktop = desktop;
@@ -38,14 +46,10 @@ export class KWinContext implements IDriverContext {
   }
 
   public toString(): string {
-    return (
-      "KWinCtx(" +
-      [
-        this.screen,
-        activityInfo.activityName(this.activity),
-        this.desktop
-      ].join(", ") +
-      ")"
-    );
+    return `KWinContext(${[
+      this.screen,
+      activityInfo.activityName(this.activity),
+      this.desktop
+    ].join(", ")})`;
   }
 }

@@ -1,8 +1,8 @@
 import { Shortcut } from "../../../architecture";
 import { IConfig } from "../../../domain/config/config";
 import { ILayout } from "../../../domain/layouts/layout";
-import { Window } from "../../../engine/window";
-import { WindowResizeDelta } from "../../../engine/window-resize-delta";
+import { Window } from "../../window/window";
+import { WindowResizeDelta } from "../../tiling/window-resize-delta";
 import { Rectangle } from "../../../utils/rectangle";
 import { clip, slide } from "../../../utils/utils-service";
 import {
