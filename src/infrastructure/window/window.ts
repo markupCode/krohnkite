@@ -1,5 +1,7 @@
-import { IDriverContext, IDriverWindow, WindowState } from "../../architecture";
+import { IDriverContext } from "../../domain/driver/driver-context";
+import { IDriverWindow } from "../../domain/driver/driver-window";
 import { ILogger } from "../../domain/logging/logger";
+import { WindowState } from "../../domain/window/window-state";
 import { Rectangle } from "../../utils/rectangle";
 
 export class Window {
@@ -38,40 +40,60 @@ export class Window {
 
   // TODO: maybe, try splitting this into multiple methods,
   //       like setTile, setFloat, setFreeTile
-  public set state(value: WindowState) {
-    if (value === WindowState.FullScreen) {
+  public set state(newState: WindowState) {
+    if (newState === WindowState.FullScreen) {
       return;
     }
 
-    const state = this.state;
-    if (state === value) {
+    const currentState = this.state;
+    if (currentState === newState) {
       return;
-    } else if (state === WindowState.Unmanaged) {
+    }
+
+    if (currentState === WindowState.Unmanaged) {
       /* internally accept the new state */
-    } else if (state === WindowState.FullScreen) {
+    } else if (currentState === WindowState.FullScreen) {
       /* internally accept the new state */
-    } else if (state === WindowState.Tile && value === WindowState.Float) {
+    } else if (
+      currentState === WindowState.Tile &&
+      newState === WindowState.Float
+    ) {
       this.window.commit(this.floatGeometry, false, false);
-    } else if (state === WindowState.Tile && value === WindowState.FreeTile) {
+    } else if (
+      currentState === WindowState.Tile &&
+      newState === WindowState.FreeTile
+    ) {
       this.window.commit(this.floatGeometry, false, false);
-    } else if (state === WindowState.Float && value === WindowState.Tile) {
+    } else if (
+      currentState === WindowState.Float &&
+      newState === WindowState.Tile
+    ) {
       this.floatGeometry = this.actualGeometry;
-    } else if (state === WindowState.Float && value === WindowState.FreeTile) {
+    } else if (
+      currentState === WindowState.Float &&
+      newState === WindowState.FreeTile
+    ) {
       /* do nothing */
-    } else if (state === WindowState.FreeTile && value === WindowState.Tile) {
+    } else if (
+      currentState === WindowState.FreeTile &&
+      newState === WindowState.Tile
+    ) {
       this.floatGeometry = this.actualGeometry;
-    } else if (state === WindowState.FreeTile && value === WindowState.Float) {
+    } else if (
+      currentState === WindowState.FreeTile &&
+      newState === WindowState.Float
+    ) {
       /* do nothing */
     } else {
       /* deny */
       this.logger.debug(() => [
         "Window.state/ignored",
-        { from: state, to: value }
+        { from: currentState, to: newState }
       ]);
       return;
     }
 
-    this._state = value;
+    this._state = newState;
   }
 
   private _state: WindowState;

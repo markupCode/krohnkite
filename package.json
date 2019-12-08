@@ -8,14 +8,14 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "mocha": "^6.0.0",
-    "prettier": "^1.18.2",
-    "ts-loader": "^6.1.0",
-    "tslint": "^5.20.0",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.6.3",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.8"
+    "mocha": "~6.0.0",
+    "prettier": "~1.18.2",
+    "ts-loader": "~6.1.0",
+    "tslint": "~5.20.0",
+    "tslint-config-prettier": "~1.18.0",
+    "typescript": "~3.7.3",
+    "webpack": "~4.40.2",
+    "webpack-cli": "~3.3.8"
   },
   "scripts": {
     "test": "mocha 'test/*.spec.js'"
